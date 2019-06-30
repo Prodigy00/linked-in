@@ -9,7 +9,7 @@ const app = express();
 app.use(
   "/graphql",
   expressGraphQL({
-    schema, //aka schema:schema
+    schema, //aka schema:schema. add schema as an option into middleware here
     graphiql: true
   })
 );

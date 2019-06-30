@@ -1,4 +1,3 @@
-import { GraphQLInt } from "graphql";
 const _ = require("lodash"); //helper library, helps  us walk through collections of data
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
@@ -24,12 +23,12 @@ const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: {
-        id: { type: GraphQLString },
-        //where we go into our data store
-        resolve(parentValue, args) {
-          //walking through our list of users, find and return the first user who ha an id equal to args.id
-          return _.find(users, { id: args.id });
-        }
+        id: { type: GraphQLString }
+      },
+      //where we go into our data store
+      resolve(parentValue, args) {
+        //walking through our list of users, find and return the first user who ha an id equal to args.id
+        return _.find(users, { id: args.id });
       }
     }
   }

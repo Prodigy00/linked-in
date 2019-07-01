@@ -24,8 +24,16 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
+    //notice the field is company not companyID, GQL allows you to do this.
+    //hint: you use resolve to teach GQL to get some data to populate the field.
     company: {
-      type: CompanyType
+      type: CompanyType,
+      resolve(parentValue, args) {
+        //console.log(parentValue, args);
+        return axios
+          .get(`http://localhost:3000/companies/${parentValue.companyId}`)
+          .then(response => response.data);
+      }
     }
   }
 });

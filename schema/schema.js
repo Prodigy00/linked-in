@@ -56,6 +56,17 @@ const RootQuery = new GraphQLObjectType({
           .get(`http://localhost:3000/users/${args.id}`)
           .then(response => response.data); //axios returns nested data like so{ data: {firstName:'David}}
       }
+    },
+    //we'll add another field to our root query type called company
+    //this enables us to be able to query the db for companies only, not just users.
+    company: {
+      type: CompanyType,
+      args: { id: { type: GraphQLString } },
+      resolve(parentValue, args) {
+        return axios
+          .get(`http://localhost:3000/companies/${args.id}`)
+          .then(response => response.data);
+      }
     }
   }
 });

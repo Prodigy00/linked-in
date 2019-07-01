@@ -6,7 +6,8 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
-  GraphQLList //don't forget to destructure whatever prop you use in the schema
+  GraphQLList, //don't forget to destructure whatever prop you use in the schema
+  GraphQLNonNull
 } = graphql;
 
 // const users = [
@@ -100,11 +101,27 @@ const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     //unlike root query the fields are named according to the type of operation the mutation will undertake.
-    addUser: {}
+    addUser: {
+      //type here refers to the type of data that we're going to eventually resolve
+      type: UserType,
+      args: {
+        firstName: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        companyId: { type: GraphQLString }
+      },
+      //firstName, age destructured from args
+      resolve(parentValue, { firstName, age }) {
+        return axios
+          .post("http://localhost:3000/users", { firstName, age })
+          .then(response => response.data);
+      }
+    }
   }
 });
 
 //GraphQL schema turns a root query into a schema instance
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  //we then inform GQL here of the root mutation
+  mutation
 });
